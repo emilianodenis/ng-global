@@ -21,12 +21,17 @@ export class StudentsComponent {
   studentFullName = studentFullName
   summary: BaseStudent[] = []
   editedStudent?: Student
+  selectedStudent?: BaseStudent
   state = EditState.read
+  title = ''
 
-  get title(): string {
-    return this.state === EditState.create
-      ? 'Add new student'
-      : `Modify ${studentFullName(this.editedStudent as BaseStudent)}`
+  setTitle(): void {
+    if (this.isReadMode) this.title = ''
+    else if (this.creationMode) this.title = 'Add new student'
+    else
+      this.title = `Modify ${studentFullName(
+        this.editedStudent as BaseStudent
+      )}`
   }
 
   get creationMode(): boolean {
@@ -63,12 +68,21 @@ export class StudentsComponent {
     })
   }
 
-  loadStudent(id: number) {
-    this.studentService.getStudent(id).subscribe({
+  loadStudent(studentToLoad: BaseStudent) {
+    this.studentService.getStudent(studentToLoad.id).subscribe({
       next: (student) => {
         this.state = EditState.edit
-        this.editedStudent = student
+        this.editedStudent = { ...student }
+        this.selectedStudent = studentToLoad
+        this.setTitle()
       },
+      error: (err) => console.log(err),
+    })
+  }
+
+  deleteStudent(id: number) {
+    this.studentService.deleteStudent(id).subscribe({
+      next: () => this.loadStudents(),
       error: (err) => console.log(err),
     })
   }
@@ -83,21 +97,29 @@ export class StudentsComponent {
       : this.studentService.createStudent(this.editedStudent!)
     httpAction$.subscribe({
       next: (student) => {
-        this.editedStudent = undefined
-        this.state = EditState.read
+        // this.editedStudent = undefined
+        // this.state = EditState.read
         this.loadStudents()
       },
       error: (err) => console.log(err),
+      complete: () => this.resetState(),
     })
   }
 
   createNewStudent(): void {
     this.state = EditState.create
     this.editedStudent = {} as Student
+    this.setTitle()
   }
 
   cancelEditing(): void {
+    this.resetState()
+  }
+
+  private resetState(): void {
     this.editedStudent = undefined
+    this.selectedStudent = undefined
     this.state = EditState.read
+    this.setTitle()
   }
 }

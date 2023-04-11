@@ -1,3 +1,6 @@
+@use "@angular/material" as mat;
+@import "../../../styles/variables.scss";
+
 :host {
   flex: 1 1 100%;
   flex-direction: column;
@@ -7,6 +10,13 @@
 .load-btn {
   font-size: 30px;
   padding: 25px;
+  direction: rtl;
+  & mat-icon {
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+    margin-left: 15px;
+  }
 }
 
 h2 {
@@ -37,6 +47,28 @@ h2 {
     flex: 1 1 100%;
     display: flex;
     flex-direction: column;
+  }
+}
+
+.students {
+  padding-left: 25px !important;
+  direction: rtl;
+  border-radius: 4px !important;
+  border: solid transparent 1px;
+  &:hover {
+    cursor: pointer;
+    background-color: gray;
+    transition: background-color 250ms;
+  }
+  &.selected {
+    border-color: steelblue;
+  }
+  & .student-name {
+    direction: ltr;
+  }
+  & .delete-student {
+    color: $warn-color;
+    padding: 5px;
   }
 }
 

@@ -1,17 +1,27 @@
 <div class="load-btn-container">
   <button mat-button (click)="loadStudents()" color="primary" class="load-btn">
-    Load All Students
+    <span>Load All Students</span>
+    <mat-icon>autorenew</mat-icon>
   </button>
 </div>
 
 <div class="student-container">
   <div class="student-section">
-    <mat-list>
+    <mat-list class="student-list">
       <mat-list-item
         *ngFor="let student of summary"
-        (click)="loadStudent(student.id)"
-        >{{ studentFullName(student) }}</mat-list-item
-      >
+        (click)="loadStudent(student)"
+        class="students"
+        [class.selected]="student === selectedStudent"
+        ><div class="student-name">{{ studentFullName(student) }}</div>
+        <mat-icon
+          matListItemIcon
+          fontIcon="delete"
+          color="warn"
+          class="delete-student"
+          (click)="deleteStudent(student.id); $event.stopImmediatePropagation()"
+        ></mat-icon>
+      </mat-list-item>
     </mat-list>
     <div class="form-action-container">
       <button
@@ -35,6 +45,7 @@
           <mat-label>Last Name</mat-label>
           <input
             matInput
+            autofocus
             [(ngModel)]="editedStudent.lastName"
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>

@@ -8,19 +8,27 @@ export class StudentService {
   private static URL = 'students'
   constructor(private http: HttpClient) {}
 
+  private getIdUrl(id: number): string {
+    return `${StudentService.URL}/${id}`
+  }
+
   public getStudents(): Observable<BaseStudent[]> {
     return this.http.get<BaseStudent[]>(StudentService.URL)
   }
 
   public getStudent(id: number): Observable<Student> {
-    return this.http.get<Student>(`${StudentService.URL}/${id}`)
+    return this.http.get<Student>(this.getIdUrl(id))
   }
 
   public udpateStudent(id: number, student: Student): Observable<Student> {
-    return this.http.put<Student>(`${StudentService.URL}/${id}`, student)
+    return this.http.put<Student>(this.getIdUrl(id), student)
   }
 
   public createStudent(student: Student): Observable<Student> {
     return this.http.post<Student>(StudentService.URL, student)
+  }
+
+  public deleteStudent(id: number): Observable<any> {
+    return this.http.delete(this.getIdUrl(id))
   }
 }
