@@ -4,6 +4,15 @@
   display: flex;
 }
 
+.load-btn {
+  font-size: 30px;
+  padding: 25px;
+}
+
+h2 {
+  color: white;
+}
+
 .load-btn-container {
   display: flex;
   align-items: center;
@@ -29,15 +38,20 @@
     display: flex;
     flex-direction: column;
   }
-  & .form-action-container {
-    display: flex;
-    flex: 1 1 100%;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 10px;
-    & button {
-      flex: 1 1 50%;
-    }
+}
+
+.create-btn {
+  flex: 0 0 50%;
+}
+
+.form-action-container {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  & button {
+    flex: 0 0 50%;
   }
 }

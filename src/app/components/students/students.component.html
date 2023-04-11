@@ -1,5 +1,5 @@
 <div class="load-btn-container">
-  <button mat-button (click)="loadStudents()" color="primary">
+  <button mat-button (click)="loadStudents()" color="primary" class="load-btn">
     Load All Students
   </button>
 </div>
@@ -10,45 +10,68 @@
       <mat-list-item
         *ngFor="let student of summary"
         (click)="loadStudent(student.id)"
-        >{{ student.firstName }} {{ student.lastName }}</mat-list-item
+        >{{ studentFullName(student) }}</mat-list-item
       >
     </mat-list>
+    <div class="form-action-container">
+      <button
+        mat-flat-button
+        color="accent"
+        class="create-btn"
+        [disabled]="!canCreate"
+        (click)="createNewStudent()"
+      >
+        CREATE
+      </button>
+    </div>
   </div>
   <div class="student-section">
-    <form class="edit" *ngIf="editedStudent" (ngSubmit)="submit()">
-      <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
-        <input
-          matInput
-          [(ngModel)]="editedStudent.lastName"
-          [ngModelOptions]="{ standalone: true }"
-      /></mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>First Name</mat-label>
-        <input
-          matInput
-          [(ngModel)]="editedStudent.firstName"
-          [ngModelOptions]="{ standalone: true }"
-      /></mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          [(ngModel)]="editedStudent.email"
-          [ngModelOptions]="{ standalone: true }"
-      /></mat-form-field>
+    <ng-container *ngIf="editedStudent">
+      <h2>
+        {{ title }}
+      </h2>
+      <form class="edit" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input
+            matInput
+            [(ngModel)]="editedStudent.lastName"
+            [ngModelOptions]="{ standalone: true }"
+        /></mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input
+            matInput
+            [(ngModel)]="editedStudent.firstName"
+            [ngModelOptions]="{ standalone: true }"
+        /></mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            [(ngModel)]="editedStudent.email"
+            [ngModelOptions]="{ standalone: true }"
+        /></mat-form-field>
 
-      <div class="form-action-container">
-        <button mat-flat-button type="submit" color="accent">SUBMIT</button>
-        <button
-          mat-stroked-button
-          type="button"
-          color="accent"
-          (click)="cancelEditing()"
-        >
-          CANCEL
-        </button>
-      </div>
-    </form>
+        <div class="form-action-container">
+          <button
+            mat-flat-button
+            type="submit"
+            color="accent"
+            [disabled]="!canSubmit"
+          >
+            SUBMIT
+          </button>
+          <button
+            mat-stroked-button
+            type="button"
+            color="accent"
+            (click)="cancelEditing()"
+          >
+            CANCEL
+          </button>
+        </div>
+      </form>
+    </ng-container>
   </div>
 </div>
