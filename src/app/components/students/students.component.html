@@ -14,5 +14,41 @@
       >
     </mat-list>
   </div>
-  <div class="student-section"></div>
+  <div class="student-section">
+    <form class="edit" *ngIf="editedStudent" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="editedStudent.lastName"
+          [ngModelOptions]="{ standalone: true }"
+      /></mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="editedStudent.firstName"
+          [ngModelOptions]="{ standalone: true }"
+      /></mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          [(ngModel)]="editedStudent.email"
+          [ngModelOptions]="{ standalone: true }"
+      /></mat-form-field>
+
+      <div class="form-action-container">
+        <button mat-flat-button type="submit" color="accent">SUBMIT</button>
+        <button
+          mat-stroked-button
+          type="button"
+          color="accent"
+          (click)="cancelEditing()"
+        >
+          CANCEL
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

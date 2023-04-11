@@ -22,6 +22,22 @@
 .student-section {
   display: flex;
   flex-direction: column;
-  flex: 0 0 50%;
+  flex: 1 1 50%;
   padding: 0 5px;
+  & form.edit {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  & .form-action-container {
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    & button {
+      flex: 1 1 50%;
+    }
+  }
 }

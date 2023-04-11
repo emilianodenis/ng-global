@@ -15,4 +15,8 @@ export class StudentService {
   public getStudent(id: number): Observable<Student> {
     return this.http.get<Student>(`${StudentService.URL}/${id}`)
   }
+
+  public udpateStudent(id: number, student: Student): Observable<Student> {
+    return this.http.put<Student>(`${StudentService.URL}/${id}`, student)
+  }
 }

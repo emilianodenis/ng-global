@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { BaseStudent } from 'src/app/model/student'
+import { BaseStudent, Student } from 'src/app/model/student'
 import { StudentService } from 'src/app/services/students.service'
 
 @Component({
@@ -9,6 +9,7 @@ import { StudentService } from 'src/app/services/students.service'
 })
 export class StudentsComponent {
   summary: BaseStudent[] = []
+  editedStudent?: Student
 
   constructor(private studentService: StudentService) {}
 
@@ -21,8 +22,24 @@ export class StudentsComponent {
 
   loadStudent(id: number) {
     this.studentService.getStudent(id).subscribe({
-      next: (student) => console.log(student),
+      next: (student) => (this.editedStudent = student),
       error: (err) => console.log(err),
     })
+  }
+
+  submit(): void {
+    this.studentService
+      .udpateStudent(this.editedStudent!.id, this.editedStudent!)
+      .subscribe({
+        next: (student) => {
+          this.editedStudent = undefined
+          this.loadStudents()
+        },
+        error: (err) => console.log(err),
+      })
+  }
+
+  cancelEditing(): void {
+    this.editedStudent = undefined
   }
 }
