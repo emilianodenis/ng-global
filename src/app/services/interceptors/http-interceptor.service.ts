@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 
 @Injectable()
-export class HttpInterceptor {
+export class PathInterceptor {
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler

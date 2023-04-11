@@ -1,1 +1,18 @@
-<button (click)="loadStudents()">Students</button>
+<div class="load-btn-container">
+  <button mat-button (click)="loadStudents()" color="primary">
+    Load All Students
+  </button>
+</div>
+
+<div class="student-container">
+  <div class="student-section">
+    <mat-list>
+      <mat-list-item
+        *ngFor="let student of summary"
+        (click)="loadStudent(student.id)"
+        >{{ student.firstName }} {{ student.lastName }}</mat-list-item
+      >
+    </mat-list>
+  </div>
+  <div class="student-section"></div>
+</div>
