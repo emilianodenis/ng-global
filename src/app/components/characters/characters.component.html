@@ -20,6 +20,7 @@
         [class.selected]="character === selectedCharacter"
         ><div class="character-name">{{ characterFullName(character) }}</div>
         <mat-icon
+          *ngIf="isReadMode"
           matListItemIcon
           fontIcon="delete"
           color="warn"
