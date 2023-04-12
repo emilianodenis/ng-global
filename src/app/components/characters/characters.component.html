@@ -64,6 +64,13 @@
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>
         <mat-form-field appearance="outline">
+          <mat-label>Profession</mat-label>
+          <input
+            matInput
+            [(ngModel)]="editedCharacter.profession"
+            [ngModelOptions]="{ standalone: true }"
+        /></mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input
             matInput

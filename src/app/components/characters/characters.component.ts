@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import {
   BaseCharacter,
   Character,
@@ -21,7 +21,7 @@ enum EditState {
   templateUrl: './characters.component.html',
   styleUrls: ['./characters.component.scss'],
 })
-export class CharactersComponent {
+export class CharactersComponent implements OnInit {
   characterFullName = characterFullName
   summary: BaseCharacter[] = []
   editedCharacter?: Character
@@ -59,11 +59,16 @@ export class CharactersComponent {
       notNullNorUndefined(this.editedCharacter) &&
       notNullNorEmpty(this.editedCharacter!.firstName) &&
       notNullNorEmpty(this.editedCharacter!.lastName) &&
+      notNullNorEmpty(this.editedCharacter!.profession) &&
       notNullNorEmpty(this.editedCharacter!.email)
     )
   }
 
   constructor(private characterService: CharacterService) {}
+
+  ngOnInit(): void {
+    this.loadCharacters()
+  }
 
   loadCharacters() {
     this.characterService.getCharacters().subscribe({
