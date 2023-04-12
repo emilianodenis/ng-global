@@ -30,7 +30,7 @@ h2 {
   padding: 5px;
 }
 
-.student-container {
+.character-container {
   display: flex;
   flex-direction: row;
   flex: 1 1 100%;
@@ -38,7 +38,7 @@ h2 {
   padding: 5px 0;
 }
 
-.student-section {
+.character-section {
   display: flex;
   flex-direction: column;
   flex: 1 1 50%;
@@ -50,7 +50,7 @@ h2 {
   }
 }
 
-.students {
+.characters {
   padding-left: 25px !important;
   direction: rtl;
   border-radius: 4px !important;
@@ -63,10 +63,10 @@ h2 {
   &.selected {
     border-color: steelblue;
   }
-  & .student-name {
+  & .character-name {
     direction: ltr;
   }
-  & .delete-student {
+  & .delete-character {
     color: $warn-color;
     padding: 5px;
   }

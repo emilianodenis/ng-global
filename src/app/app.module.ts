@@ -9,15 +9,15 @@ import { MatListModule } from '@angular/material/list'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NewsFeedComponent } from 'src/app//components/news-feed/news-feed.component'
-import { StudentsComponent } from 'src/app//components/students/students.component'
+import { CharactersComponent } from 'src/app/components/characters/characters.component'
+import { CharacterService } from 'src/app/services/characters.service'
 import { DelayInterceptor } from 'src/app/services/interceptors/delay-interceptor.service'
 import { PathInterceptor } from 'src/app/services/interceptors/http-interceptor.service'
-import { StudentService } from 'src/app/services/students.service'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 
 @NgModule({
-  declarations: [AppComponent, NewsFeedComponent, StudentsComponent],
+  declarations: [AppComponent, CharactersComponent, NewsFeedComponent],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -32,7 +32,7 @@ import { AppComponent } from './app.component'
     ReactiveFormsModule,
   ],
   providers: [
-    StudentService,
+    CharacterService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: PathInterceptor,

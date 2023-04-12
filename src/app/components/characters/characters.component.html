@@ -1,25 +1,32 @@
 <div class="load-btn-container">
-  <button mat-button (click)="loadStudents()" color="primary" class="load-btn">
-    <span>Load All Students</span>
+  <button
+    mat-button
+    (click)="loadCharacters()"
+    color="primary"
+    class="load-btn"
+  >
+    <span>Load All Characters</span>
     <mat-icon>autorenew</mat-icon>
   </button>
 </div>
 
-<div class="student-container">
-  <div class="student-section">
-    <mat-list class="student-list">
+<div class="character-container">
+  <div class="character-section">
+    <mat-list class="character-list">
       <mat-list-item
-        *ngFor="let student of summary"
-        (click)="loadStudent(student)"
-        class="students"
-        [class.selected]="student === selectedStudent"
-        ><div class="student-name">{{ studentFullName(student) }}</div>
+        *ngFor="let character of summary"
+        (click)="loadCharacter(character)"
+        class="characters"
+        [class.selected]="character === selectedCharacter"
+        ><div class="character-name">{{ characterFullName(character) }}</div>
         <mat-icon
           matListItemIcon
           fontIcon="delete"
           color="warn"
-          class="delete-student"
-          (click)="deleteStudent(student.id); $event.stopImmediatePropagation()"
+          class="delete-character"
+          (click)="
+            deleteCharacter(character.id); $event.stopImmediatePropagation()
+          "
         ></mat-icon>
       </mat-list-item>
     </mat-list>
@@ -29,14 +36,14 @@
         color="accent"
         class="create-btn"
         [disabled]="!canCreate"
-        (click)="createNewStudent()"
+        (click)="createNewCharacter()"
       >
         CREATE
       </button>
     </div>
   </div>
-  <div class="student-section">
-    <ng-container *ngIf="editedStudent">
+  <div class="character-section">
+    <ng-container *ngIf="editedCharacter">
       <h2>
         {{ title }}
       </h2>
@@ -46,21 +53,21 @@
           <input
             matInput
             autofocus
-            [(ngModel)]="editedStudent.lastName"
+            [(ngModel)]="editedCharacter.lastName"
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>First Name</mat-label>
           <input
             matInput
-            [(ngModel)]="editedStudent.firstName"
+            [(ngModel)]="editedCharacter.firstName"
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input
             matInput
-            [(ngModel)]="editedStudent.email"
+            [(ngModel)]="editedCharacter.email"
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>
 
