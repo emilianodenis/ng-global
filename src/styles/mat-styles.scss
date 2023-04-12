@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 html,
 body {
   height: 100%;
@@ -5,4 +7,28 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.snackbar-success {
+  border-radius: 4px;
+  color: $default-font-color;
+  background-color: $snackbar-success;
+  text-align: center;
+  & div {
+    border-radius: 4px;
+    color: $default-font-color !important;
+    background-color: $snackbar-success !important;
+  }
+}
+
+.snackbar-failure {
+  border-radius: 4px;
+  color: $default-font-color;
+  background-color: $warn-color;
+  text-align: center;
+  & div {
+    border-radius: 4px;
+    color: $default-font-color !important;
+    background-color: $warn-color !important;
+  }
 }
