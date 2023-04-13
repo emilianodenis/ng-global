@@ -1,3 +1,5 @@
+import { Profession } from 'src/app/model/profession'
+
 export interface BaseCharacter {
   id: number
   firstName: string
@@ -6,7 +8,7 @@ export interface BaseCharacter {
 
 export interface Character extends BaseCharacter {
   email: string
-  profession: string
+  profession: Profession
 }
 
 export function characterFullName(character: BaseCharacter): string {

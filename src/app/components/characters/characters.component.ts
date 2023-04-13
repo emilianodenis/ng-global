@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
+import { zip } from 'rxjs'
 import {
   BaseCharacter,
   Character,
   characterFullName,
 } from 'src/app/model/character'
+import { Profession } from 'src/app/model/profession'
 import { CharacterService } from 'src/app/services/characters.service'
-import {
-  notNullNorEmpty,
-  notNullNorUndefined,
-} from 'src/app/utils/object-utils'
+import { ProfessionsService } from 'src/app/services/professions.service'
+import { isNullOrUndefined, isNullOrEmpty } from 'src/app/utils/object-utils'
 import {
   getFailureSnackbarOptions,
   getSuccessSnackbarOptions,
@@ -29,6 +29,7 @@ enum EditState {
 export class CharactersComponent implements OnInit {
   characterFullName = characterFullName
   summary: BaseCharacter[] = []
+  professions: Profession[] = []
   editedCharacter?: Character
   selectedCharacter?: BaseCharacter
   state = EditState.read
@@ -52,21 +53,22 @@ export class CharactersComponent implements OnInit {
 
   get canSubmit(): boolean {
     return (
-      notNullNorUndefined(this.editedCharacter) &&
-      notNullNorEmpty(this.editedCharacter!.firstName) &&
-      notNullNorEmpty(this.editedCharacter!.lastName) &&
-      notNullNorEmpty(this.editedCharacter!.profession) &&
-      notNullNorEmpty(this.editedCharacter!.email)
+      !isNullOrUndefined(this.editedCharacter) &&
+      !isNullOrUndefined(this.editedCharacter!.profession) &&
+      !isNullOrEmpty(this.editedCharacter!.firstName) &&
+      !isNullOrEmpty(this.editedCharacter!.lastName) &&
+      !isNullOrEmpty(this.editedCharacter!.email)
     )
   }
 
   constructor(
     private characterService: CharacterService,
+    private professionService: ProfessionsService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.loadCharacters()
+    this.loadInitialData()
   }
 
   setTitle(): void {
@@ -78,9 +80,16 @@ export class CharactersComponent implements OnInit {
       )}`
   }
 
-  loadCharacters() {
-    this.characterService.getCharacters().subscribe({
-      next: (characters) => (this.summary = characters),
+  loadInitialData() {
+    let data$ = zip(
+      this.characterService.getCharacters(),
+      this.professionService.getProfessions()
+    )
+    data$.subscribe({
+      next: ([characters, professions]) => {
+        this.summary = characters
+        this.professions = professions
+      },
       error: (err) => {
         this.snackBar.open(
           'Could not retrieve list of characters',
@@ -114,7 +123,7 @@ export class CharactersComponent implements OnInit {
   deleteCharacter(id: number) {
     this.characterService.deleteCharacter(id).subscribe({
       next: () => {
-        this.loadCharacters()
+        this.loadInitialData()
         this.snackBar.open(
           'Character deleted successfully',
           undefined,
@@ -147,7 +156,7 @@ export class CharactersComponent implements OnInit {
           undefined,
           getSuccessSnackbarOptions()
         )
-        this.loadCharacters()
+        this.loadInitialData()
       },
       error: (err) => {
         this.snackBar.open(

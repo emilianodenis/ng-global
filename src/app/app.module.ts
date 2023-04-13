@@ -14,6 +14,7 @@ import { CharactersComponent } from 'src/app/components/characters/characters.co
 import { CharacterService } from 'src/app/services/characters.service'
 import { DelayInterceptor } from 'src/app/services/interceptors/delay-interceptor.service'
 import { PathInterceptor } from 'src/app/services/interceptors/http-interceptor.service'
+import { ProfessionsService } from 'src/app/services/professions.service'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 
@@ -35,6 +36,7 @@ import { AppComponent } from './app.component'
   ],
   providers: [
     CharacterService,
+    ProfessionsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: PathInterceptor,
