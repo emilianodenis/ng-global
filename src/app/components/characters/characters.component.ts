@@ -9,11 +9,12 @@ import {
 import { Profession } from 'src/app/model/profession'
 import { CharacterService } from 'src/app/services/characters.service'
 import { ProfessionsService } from 'src/app/services/professions.service'
-import { isNullOrUndefined, isNullOrEmpty } from 'src/app/utils/object-utils'
+import { isNullOrUndefined } from 'src/app/utils/object-utils'
 import {
   getFailureSnackbarOptions,
   getSuccessSnackbarOptions,
 } from 'src/app/utils/snackbar-utils'
+import { isNullOrEmpty } from 'src/app/utils/string-utils'
 
 enum EditState {
   create,
@@ -102,22 +103,24 @@ export class CharactersComponent implements OnInit {
   }
 
   loadCharacter(characterToLoad: BaseCharacter) {
-    this.characterService.getCharacter(characterToLoad.id).subscribe({
-      next: (character) => {
-        this.state = EditState.edit
-        this.editedCharacter = { ...character }
-        this.selectedCharacter = characterToLoad
-        this.setTitle()
-      },
-      error: (err) => {
-        this.snackBar.open(
-          'Could not retrieve character to edit',
-          undefined,
-          getFailureSnackbarOptions()
-        )
-        console.log(err)
-      },
-    })
+    this.characterService
+      .getCharacter(characterToLoad.id, this.professions)
+      .subscribe({
+        next: (character) => {
+          this.state = EditState.edit
+          this.editedCharacter = character
+          this.selectedCharacter = characterToLoad
+          this.setTitle()
+        },
+        error: (err) => {
+          this.snackBar.open(
+            'Could not retrieve character to edit',
+            undefined,
+            getFailureSnackbarOptions()
+          )
+          console.log(err)
+        },
+      })
   }
 
   deleteCharacter(id: number) {

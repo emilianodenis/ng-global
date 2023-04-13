@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Observable, map } from 'rxjs'
 import { BaseCharacter, Character } from 'src/app/model/character'
+import { Profession } from 'src/app/model/profession'
 
 @Injectable()
 export class CharacterService {
@@ -16,8 +17,21 @@ export class CharacterService {
     return this.http.get<BaseCharacter[]>(CharacterService.URL)
   }
 
-  public getCharacter(id: number): Observable<Character> {
-    return this.http.get<Character>(this.getIdUrl(id))
+  public getCharacter(
+    id: number,
+    professions?: Profession[]
+  ): Observable<Character> {
+    return this.http.get<Character>(this.getIdUrl(id)).pipe(
+      map((c) => {
+        if (professions?.length && c.profession) {
+          let profession = professions.find((p) => p.id === c.profession.id)
+          if (profession) {
+            c.profession = profession
+          }
+        }
+        return c
+      })
+    )
   }
 
   public udpateCharacter(

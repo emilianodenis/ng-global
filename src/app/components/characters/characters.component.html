@@ -64,13 +64,19 @@
             [(ngModel)]="editedCharacter.firstName"
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>Profession</mat-label>
-          <input
-            matInput
+          <mat-select
             [(ngModel)]="editedCharacter.profession"
             [ngModelOptions]="{ standalone: true }"
-        /></mat-form-field>
+          >
+            <mat-option *ngFor="let p of professions" [value]="p">
+              {{ p.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input
