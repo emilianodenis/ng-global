@@ -7,6 +7,16 @@
   display: flex;
 }
 
+a {
+  color: unset;
+  text-decoration: unset;
+  color: unset;
+  text-decoration: unset;
+  justify-content: space-between;
+  align-items: center;
+  direction: ltr;
+}
+
 .load-btn {
   font-size: 30px;
   padding: 25px;
@@ -30,7 +40,8 @@ h2 {
   padding: 5px;
 }
 
-.character-container {
+.character-container,
+a {
   display: flex;
   flex-direction: row;
   flex: 1 1 100%;

@@ -11,16 +11,22 @@ import { MatSnackBarModule } from '@angular/material/snack-bar'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NewsFeedComponent } from 'src/app//components/news-feed/news-feed.component'
+import { AppRoutingModule } from 'src/app/app-routing.module'
+import { AppComponent } from 'src/app/app.component'
 import { CharactersComponent } from 'src/app/components/characters/characters.component'
+import { ProfessionsComponent } from 'src/app/components/professions/professions.component'
 import { CharacterService } from 'src/app/services/characters.service'
 import { DelayInterceptor } from 'src/app/services/interceptors/delay-interceptor.service'
 import { PathInterceptor } from 'src/app/services/interceptors/http-interceptor.service'
 import { ProfessionsService } from 'src/app/services/professions.service'
-import { AppRoutingModule } from './app-routing.module'
-import { AppComponent } from './app.component'
 
 @NgModule({
-  declarations: [AppComponent, CharactersComponent, NewsFeedComponent],
+  declarations: [
+    AppComponent,
+    CharactersComponent,
+    NewsFeedComponent,
+    ProfessionsComponent,
+  ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,

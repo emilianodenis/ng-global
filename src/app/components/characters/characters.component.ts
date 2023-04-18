@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
+import { ActivatedRoute } from '@angular/router'
 import { zip } from 'rxjs'
 import {
   BaseCharacter,
@@ -65,11 +66,17 @@ export class CharactersComponent implements OnInit {
   constructor(
     private characterService: CharacterService,
     private professionService: ProfessionsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.loadInitialData()
+    this.loadInitialData(true)
+    this.activatedRoute.queryParamMap.subscribe((p) => {
+      if (p.has('id')) {
+        this.loadCharacter(p.get('id')!)
+      }
+    })
   }
 
   setTitle(): void {
@@ -81,7 +88,7 @@ export class CharactersComponent implements OnInit {
       )}`
   }
 
-  loadInitialData() {
+  loadInitialData(shouldLoadCharacter = false) {
     let data$ = zip(
       this.characterService.getCharacters(),
       this.professionService.getProfessions()
@@ -90,6 +97,12 @@ export class CharactersComponent implements OnInit {
       next: ([characters, professions]) => {
         this.summary = characters
         this.professions = professions
+        if (shouldLoadCharacter) {
+          const params = this.activatedRoute.snapshot.queryParams
+          if (params['id']) {
+            this.loadCharacter(params['id'])
+          }
+        }
       },
       error: (err) => {
         this.snackBar.open(
@@ -102,7 +115,16 @@ export class CharactersComponent implements OnInit {
     })
   }
 
-  loadCharacter(characterToLoad: BaseCharacter) {
+  loadCharacter(id: string) {
+    if (isNullOrEmpty(id)) return
+
+    const characterId = Number.parseInt(id)
+
+    if (isNaN(characterId)) return
+
+    const characterToLoad = this.summary.find((c) => c.id === characterId)
+    if (!characterToLoad) return
+
     this.characterService
       .getCharacter(characterToLoad.id, this.professions)
       .subscribe({
@@ -113,6 +135,7 @@ export class CharactersComponent implements OnInit {
           this.setTitle()
         },
         error: (err) => {
+          this.resetState()
           this.snackBar.open(
             'Could not retrieve character to edit',
             undefined,

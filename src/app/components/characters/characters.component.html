@@ -15,10 +15,15 @@
     <mat-list class="character-list">
       <mat-list-item
         *ngFor="let character of summary"
-        (click)="loadCharacter(character)"
         class="characters"
         [class.selected]="character === selectedCharacter"
-        ><div class="character-name">{{ characterFullName(character) }}</div>
+      >
+        <a
+          class="character-name"
+          routerLink="/characters"
+          [queryParams]="{ id: character.id }"
+          >{{ characterFullName(character) }}</a
+        >
         <mat-icon
           *ngIf="isReadMode"
           matListItemIcon
@@ -26,7 +31,7 @@
           color="warn"
           class="delete-character"
           (click)="
-            deleteCharacter(character.id); $event.stopImmediatePropagation()
+            $event.stopImmediatePropagation(); deleteCharacter(character.id)
           "
         ></mat-icon>
       </mat-list-item>
