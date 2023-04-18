@@ -1,0 +1,101 @@
+@use "@angular/material" as mat;
+@import "../../../styles/variables.scss";
+
+:host {
+  flex: 1 1 100%;
+  flex-direction: column;
+  display: flex;
+}
+
+a {
+  color: unset;
+  text-decoration: unset;
+  color: unset;
+  text-decoration: unset;
+  justify-content: space-between;
+  align-items: center;
+  direction: ltr;
+}
+
+.load-btn {
+  font-size: 30px;
+  padding: 25px;
+  direction: rtl;
+  & mat-icon {
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+    margin-left: 15px;
+  }
+}
+
+h2 {
+  color: white;
+}
+
+.load-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.profession-container,
+a {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 100%;
+  overflow: hidden;
+  padding: 5px 0;
+}
+
+.profession-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 50%;
+  padding: 0 5px;
+  & form.edit {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.professions {
+  padding-left: 25px !important;
+  direction: rtl;
+  border-radius: 4px !important;
+  border: solid transparent 1px;
+  height: 55px !important;
+  &:hover {
+    cursor: pointer;
+    background-color: gray;
+    transition: background-color 250ms;
+  }
+  &.selected {
+    border-color: steelblue;
+  }
+  & .profession-name {
+    direction: ltr;
+  }
+  & .delete-profession {
+    color: $warn-color;
+    padding: 5px;
+  }
+}
+
+.create-btn {
+  flex: 0 0 50%;
+}
+
+.form-action-container {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  & button {
+    flex: 0 0 50%;
+  }
+}

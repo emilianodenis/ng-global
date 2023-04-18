@@ -7,6 +7,7 @@ import {
   Character,
   characterFullName,
 } from 'src/app/model/character'
+import { EditState } from 'src/app/model/edit-state'
 import { Profession } from 'src/app/model/profession'
 import { CharacterService } from 'src/app/services/characters.service'
 import { ProfessionsService } from 'src/app/services/professions.service'
@@ -16,12 +17,6 @@ import {
   getSuccessSnackbarOptions,
 } from 'src/app/utils/snackbar-utils'
 import { isNullOrEmpty } from 'src/app/utils/string-utils'
-
-enum EditState {
-  create,
-  edit,
-  read,
-}
 
 @Component({
   selector: 'app-characters',
@@ -137,7 +132,9 @@ export class CharactersComponent implements OnInit {
         error: (err) => {
           this.resetState()
           this.snackBar.open(
-            'Could not retrieve character to edit',
+            `Could not retrieve character to edit (${characterFullName(
+              characterToLoad
+            )})`,
             undefined,
             getFailureSnackbarOptions()
           )
