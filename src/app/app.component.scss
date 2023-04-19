@@ -4,8 +4,15 @@
   flex-direction: column;
 }
 
+app-news-feed {
+  display: none;
+}
+
 nav {
   padding-top: 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 ul {
