@@ -4,7 +4,9 @@ import { Observable, map } from 'rxjs'
 import { BaseCharacter, Character } from 'src/app/model/character'
 import { Profession } from 'src/app/model/profession'
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CharacterService {
   private static URL = 'characters'
   constructor(private http: HttpClient) {}

@@ -15,10 +15,8 @@ import { AppRoutingModule } from 'src/app/app-routing.module'
 import { AppComponent } from 'src/app/app.component'
 import { CharactersComponent } from 'src/app/components/characters/characters.component'
 import { ProfessionsComponent } from 'src/app/components/professions/professions.component'
-import { CharacterService } from 'src/app/services/characters.service'
 import { DelayInterceptor } from 'src/app/services/interceptors/delay-interceptor.service'
 import { PathInterceptor } from 'src/app/services/interceptors/http-interceptor.service'
-import { ProfessionsService } from 'src/app/services/professions.service'
 
 @NgModule({
   declarations: [
@@ -43,8 +41,6 @@ import { ProfessionsService } from 'src/app/services/professions.service'
     ReactiveFormsModule,
   ],
   providers: [
-    CharacterService,
-    ProfessionsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: PathInterceptor,

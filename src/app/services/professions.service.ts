@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Profession } from 'src/app/model/profession'
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ProfessionsService {
   private static URL = 'professions'
   constructor(private http: HttpClient) {}
