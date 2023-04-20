@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { Action } from 'src/app/model/action'
-import { Character } from 'src/app/model/character'
+import { Character, characterFullName } from 'src/app/model/character'
 import { DemoMessage } from 'src/app/model/demo-message'
 import { Profession } from 'src/app/model/profession'
 import { AppStateService } from 'src/app/services/app-state.service'
@@ -39,7 +39,7 @@ export class NewsFeedComponent implements OnInit {
       this.appStateService.chracterSessionId = message.sessionId
     } else {
       this.snackBar.open(
-        'Something happened with a character',
+        this.getCharacterMessage(message),
         undefined,
         getSuccessSnackbarOptions()
       )
@@ -52,10 +52,34 @@ export class NewsFeedComponent implements OnInit {
       this.appStateService.professionSessionId = message.sessionId
     } else {
       this.snackBar.open(
-        'Something happened with a profession',
+        this.getProfessionMessage(message),
         undefined,
         getSuccessSnackbarOptions()
       )
     }
+  }
+
+  private getProfessionMessage(message: DemoMessage<Profession>): string {
+    const profession = message.message.description
+    if (message.action === Action.CREATE) {
+      return `New profession created: '${profession}'`
+    } else if (message.action === Action.UPDATE) {
+      return `Profession '${profession}' has just been modified`
+    } else if (message.action === Action.DELETE) {
+      return `Profession '${profession}' was deleted`
+    }
+    return ''
+  }
+
+  private getCharacterMessage(message: DemoMessage<Character>): string {
+    const character = characterFullName(message.message)
+    if (message.action === Action.CREATE) {
+      return `New character created: '${character}'`
+    } else if (message.action === Action.UPDATE) {
+      return `Character '${character}' has just been modified`
+    } else if (message.action === Action.DELETE) {
+      return `Character '${character}' was deleted`
+    }
+    return ''
   }
 }
