@@ -6,6 +6,6 @@ import { Injectable } from '@angular/core'
 export class AppStateService {
   constructor() {}
 
-  chracterSessionId?: String
-  professionSessionId?: String
+  chracterSessionId?: string
+  professionSessionId?: string
 }

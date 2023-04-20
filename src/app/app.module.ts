@@ -17,6 +17,7 @@ import { CharactersComponent } from 'src/app/components/characters/characters.co
 import { ProfessionsComponent } from 'src/app/components/professions/professions.component'
 import { DelayInterceptor } from 'src/app/services/interceptors/delay-interceptor.service'
 import { PathInterceptor } from 'src/app/services/interceptors/http-interceptor.service'
+import { SessionInterceptor } from 'src/app/services/interceptors/session-id-interceptor.service'
 
 @NgModule({
   declarations: [
@@ -44,6 +45,11 @@ import { PathInterceptor } from 'src/app/services/interceptors/http-interceptor.
     {
       provide: HTTP_INTERCEPTORS,
       useClass: PathInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SessionInterceptor,
       multi: true,
     },
     {
