@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Action } from 'src/app/model/action'
+import { DemoMessage } from 'src/app/model/demo-message'
 import { EditState } from 'src/app/model/edit-state'
 import { Profession } from 'src/app/model/profession'
+import { AppStateService } from 'src/app/services/app-state.service'
 import { ProfessionsService } from 'src/app/services/professions.service'
 import { isNullOrUndefined } from 'src/app/utils/object-utils'
-import {
-  getFailureSnackbarOptions,
-  getSuccessSnackbarOptions,
-} from 'src/app/utils/snackbar-utils'
+import { getFailureSnackbarOptions, getSuccessSnackbarOptions } from 'src/app/utils/snackbar-utils'
 import { isNullOrEmpty } from 'src/app/utils/string-utils'
 
 @Component({
@@ -49,19 +49,26 @@ export class ProfessionsComponent implements OnInit {
   constructor(
     private professionService: ProfessionsService,
     private snackBar: MatSnackBar,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private appStateService: AppStateService,
   ) {}
 
   ngOnInit(): void {
     this.loadInitialData(true)
+    this.setHandlers()
+  }
+
+  private setHandlers(): void {
     this.activatedRoute.queryParamMap.subscribe((p) => {
       if (p.has('id')) {
         this.loadProfession(p.get('id')!)
       }
     })
+    this.appStateService.professionAction$.subscribe((m) => this.handleProfessionAction(m))
   }
 
-  setTitle(): void {
+  private setTitle(): void {
     if (this.isReadMode) this.title = ''
     else if (this.creationMode) this.title = 'Add new profession'
     else this.title = `Modify ${this.editedProfession?.description}`
@@ -82,11 +89,27 @@ export class ProfessionsComponent implements OnInit {
         this.snackBar.open(
           'Could not retrieve list of professions',
           undefined,
-          getFailureSnackbarOptions()
+          getFailureSnackbarOptions(),
         )
         console.log(err)
       },
     })
+  }
+
+  private handleProfessionAction(message: DemoMessage<Profession>): void {
+    if (message.action === Action.DELETE) {
+      const idx = this.summary.findIndex((p) => p.id === message.content.id)
+      if (idx > -1) {
+        this.summary.splice(idx, 1)
+      }
+    } else if (message.action === Action.UPDATE) {
+      const idx = this.summary.findIndex((p) => p.id === message.content.id)
+      if (idx > -1) {
+        this.summary[idx] = message.content
+      }
+    } else if (message.action === Action.CREATE) {
+      this.summary.push(message.content)
+    }
   }
 
   loadProfession(id: string) {
@@ -111,7 +134,7 @@ export class ProfessionsComponent implements OnInit {
         this.snackBar.open(
           `Could not retrieve profession to edit (${professionToLoad.description})`,
           undefined,
-          getFailureSnackbarOptions()
+          getFailureSnackbarOptions(),
         )
         console.log(err)
       },
@@ -125,14 +148,14 @@ export class ProfessionsComponent implements OnInit {
         this.snackBar.open(
           'Profession deleted successfully',
           undefined,
-          getSuccessSnackbarOptions()
+          getSuccessSnackbarOptions(),
         )
       },
       error: (err) => {
         this.snackBar.open(
           'An error happened while trying to delete the profession. Please try again in a few minutes',
           undefined,
-          getFailureSnackbarOptions()
+          getFailureSnackbarOptions(),
         )
         console.log(err)
       },
@@ -142,17 +165,14 @@ export class ProfessionsComponent implements OnInit {
   submit(): void {
     if (!this.canSubmit) return
     let httpAction$ = this.editionMode
-      ? this.professionService.udpateProfession(
-          this.editedProfession!.id,
-          this.editedProfession!
-        )
+      ? this.professionService.udpateProfession(this.editedProfession!.id, this.editedProfession!)
       : this.professionService.createProfession(this.editedProfession!)
     httpAction$.subscribe({
       next: (profession) => {
         this.snackBar.open(
           'Profession submitted successfully',
           undefined,
-          getSuccessSnackbarOptions()
+          getSuccessSnackbarOptions(),
         )
         this.loadInitialData()
       },
@@ -160,7 +180,7 @@ export class ProfessionsComponent implements OnInit {
         this.snackBar.open(
           'An error happened while trying to submit the profession. Please try again in a few minutes',
           undefined,
-          getFailureSnackbarOptions()
+          getFailureSnackbarOptions(),
         )
         console.log(err)
       },
@@ -183,5 +203,8 @@ export class ProfessionsComponent implements OnInit {
     this.selectedProfession = undefined
     this.state = EditState.read
     this.setTitle()
+    this.router.navigate([], {
+      queryParams: { id: null },
+    })
   }
 }

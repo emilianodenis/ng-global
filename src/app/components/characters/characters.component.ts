@@ -1,21 +1,17 @@
 import { Component, OnInit } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { zip } from 'rxjs'
-import {
-  BaseCharacter,
-  Character,
-  characterFullName,
-} from 'src/app/model/character'
+import { Action } from 'src/app/model/action'
+import { BaseCharacter, Character, characterFullName } from 'src/app/model/character'
+import { DemoMessage } from 'src/app/model/demo-message'
 import { EditState } from 'src/app/model/edit-state'
 import { Profession } from 'src/app/model/profession'
+import { AppStateService } from 'src/app/services/app-state.service'
 import { CharacterService } from 'src/app/services/characters.service'
 import { ProfessionsService } from 'src/app/services/professions.service'
 import { isNullOrUndefined } from 'src/app/utils/object-utils'
-import {
-  getFailureSnackbarOptions,
-  getSuccessSnackbarOptions,
-} from 'src/app/utils/snackbar-utils'
+import { getFailureSnackbarOptions, getSuccessSnackbarOptions } from 'src/app/utils/snackbar-utils'
 import { isNullOrEmpty } from 'src/app/utils/string-utils'
 
 @Component({
@@ -62,32 +58,33 @@ export class CharactersComponent implements OnInit {
     private characterService: CharacterService,
     private professionService: ProfessionsService,
     private snackBar: MatSnackBar,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private appStateService: AppStateService,
   ) {}
 
   ngOnInit(): void {
     this.loadInitialData(true)
+    this.setHandlers()
+  }
+
+  private setHandlers(): void {
     this.activatedRoute.queryParamMap.subscribe((p) => {
       if (p.has('id')) {
         this.loadCharacter(p.get('id')!)
       }
     })
+    this.appStateService.characterAction$.subscribe((m) => this.handleCharacterAction(m))
   }
 
   setTitle(): void {
     if (this.isReadMode) this.title = ''
     else if (this.creationMode) this.title = 'Add new character'
-    else
-      this.title = `Modify ${characterFullName(
-        this.editedCharacter as BaseCharacter
-      )}`
+    else this.title = `Modify ${characterFullName(this.editedCharacter as BaseCharacter)}`
   }
 
   loadInitialData(shouldLoadCharacter = false) {
-    let data$ = zip(
-      this.characterService.getCharacters(),
-      this.professionService.getProfessions()
-    )
+    let data$ = zip(this.characterService.getCharacters(), this.professionService.getProfessions())
     data$.subscribe({
       next: ([characters, professions]) => {
         this.summary = characters
@@ -103,11 +100,27 @@ export class CharactersComponent implements OnInit {
         this.snackBar.open(
           'Could not retrieve list of characters',
           undefined,
-          getFailureSnackbarOptions()
+          getFailureSnackbarOptions(),
         )
         console.log(err)
       },
     })
+  }
+
+  private handleCharacterAction(message: DemoMessage<Character>): void {
+    if (message.action === Action.DELETE) {
+      const idx = this.summary.findIndex((p) => p.id === message.content.id)
+      if (idx > -1) {
+        this.summary.splice(idx, 1)
+      }
+    } else if (message.action === Action.UPDATE) {
+      const idx = this.summary.findIndex((p) => p.id === message.content.id)
+      if (idx > -1) {
+        this.summary[idx] = message.content
+      }
+    } else if (message.action === Action.CREATE) {
+      this.summary.push(message.content)
+    }
   }
 
   loadCharacter(id: string) {
@@ -120,44 +133,36 @@ export class CharactersComponent implements OnInit {
     const characterToLoad = this.summary.find((c) => c.id === characterId)
     if (!characterToLoad) return
 
-    this.characterService
-      .getCharacter(characterToLoad.id, this.professions)
-      .subscribe({
-        next: (character) => {
-          this.state = EditState.edit
-          this.editedCharacter = character
-          this.selectedCharacter = characterToLoad
-          this.setTitle()
-        },
-        error: (err) => {
-          this.resetState()
-          this.snackBar.open(
-            `Could not retrieve character to edit (${characterFullName(
-              characterToLoad
-            )})`,
-            undefined,
-            getFailureSnackbarOptions()
-          )
-          console.log(err)
-        },
-      })
+    this.characterService.getCharacter(characterToLoad.id, this.professions).subscribe({
+      next: (character) => {
+        this.state = EditState.edit
+        this.editedCharacter = character
+        this.selectedCharacter = characterToLoad
+        this.setTitle()
+      },
+      error: (err) => {
+        this.resetState()
+        this.snackBar.open(
+          `Could not retrieve character to edit (${characterFullName(characterToLoad)})`,
+          undefined,
+          getFailureSnackbarOptions(),
+        )
+        console.log(err)
+      },
+    })
   }
 
   deleteCharacter(id: number) {
     this.characterService.deleteCharacter(id).subscribe({
       next: () => {
         this.loadInitialData()
-        this.snackBar.open(
-          'Character deleted successfully',
-          undefined,
-          getSuccessSnackbarOptions()
-        )
+        this.snackBar.open('Character deleted successfully', undefined, getSuccessSnackbarOptions())
       },
       error: (err) => {
         this.snackBar.open(
           'An error happened while trying to delete the character. Please try again in a few minutes',
           undefined,
-          getFailureSnackbarOptions()
+          getFailureSnackbarOptions(),
         )
         console.log(err)
       },
@@ -167,17 +172,14 @@ export class CharactersComponent implements OnInit {
   submit(): void {
     if (!this.canSubmit) return
     let httpAction$ = this.editionMode
-      ? this.characterService.udpateCharacter(
-          this.editedCharacter!.id,
-          this.editedCharacter!
-        )
+      ? this.characterService.udpateCharacter(this.editedCharacter!.id, this.editedCharacter!)
       : this.characterService.createCharacter(this.editedCharacter!)
     httpAction$.subscribe({
       next: (character) => {
         this.snackBar.open(
           'Character submitted successfully',
           undefined,
-          getSuccessSnackbarOptions()
+          getSuccessSnackbarOptions(),
         )
         this.loadInitialData()
       },
@@ -185,7 +187,7 @@ export class CharactersComponent implements OnInit {
         this.snackBar.open(
           'An error happened while trying to submit the character. Please try again in a few minutes',
           undefined,
-          getFailureSnackbarOptions()
+          getFailureSnackbarOptions(),
         )
         console.log(err)
       },
@@ -208,5 +210,8 @@ export class CharactersComponent implements OnInit {
     this.selectedCharacter = undefined
     this.state = EditState.read
     this.setTitle()
+    this.router.navigate([], {
+      queryParams: { id: null },
+    })
   }
 }

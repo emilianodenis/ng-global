@@ -16,10 +16,7 @@ export class NewsFeedComponent implements OnInit {
   professionWebSocketEndPoint = 'ws://localhost:4200/ws/professions'
   characterWebSocketEndPoint = 'ws://localhost:4200/ws/characters'
 
-  constructor(
-    private appStateService: AppStateService,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private appStateService: AppStateService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.connect()
@@ -38,11 +35,8 @@ export class NewsFeedComponent implements OnInit {
     if (message.action === Action.SESSION_ID) {
       this.appStateService.chracterSessionId = message.sessionId
     } else {
-      this.snackBar.open(
-        this.getCharacterMessage(message),
-        undefined,
-        getSuccessSnackbarOptions()
-      )
+      this.snackBar.open(this.getCharacterMessage(message), undefined, getSuccessSnackbarOptions())
+      this.appStateService.notifyChacracterAction(message)
     }
   }
 
@@ -51,16 +45,13 @@ export class NewsFeedComponent implements OnInit {
     if (message.action === Action.SESSION_ID) {
       this.appStateService.professionSessionId = message.sessionId
     } else {
-      this.snackBar.open(
-        this.getProfessionMessage(message),
-        undefined,
-        getSuccessSnackbarOptions()
-      )
+      this.snackBar.open(this.getProfessionMessage(message), undefined, getSuccessSnackbarOptions())
+      this.appStateService.notifyProfessionAction(message)
     }
   }
 
   private getProfessionMessage(message: DemoMessage<Profession>): string {
-    const profession = message.message.description
+    const profession = message.content.description
     if (message.action === Action.CREATE) {
       return `New profession created: '${profession}'`
     } else if (message.action === Action.UPDATE) {
@@ -72,7 +63,7 @@ export class NewsFeedComponent implements OnInit {
   }
 
   private getCharacterMessage(message: DemoMessage<Character>): string {
-    const character = characterFullName(message.message)
+    const character = characterFullName(message.content)
     if (message.action === Action.CREATE) {
       return `New character created: '${character}'`
     } else if (message.action === Action.UPDATE) {
