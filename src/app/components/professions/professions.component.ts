@@ -98,15 +98,9 @@ export class ProfessionsComponent implements OnInit {
 
   private handleProfessionAction(message: DemoMessage<Profession>): void {
     if (message.action === Action.DELETE) {
-      const idx = this.summary.findIndex((p) => p.id === message.content.id)
-      if (idx > -1) {
-        this.summary.splice(idx, 1)
-      }
+      this.removeProfession(message.content)
     } else if (message.action === Action.UPDATE) {
-      const idx = this.summary.findIndex((p) => p.id === message.content.id)
-      if (idx > -1) {
-        this.summary[idx] = message.content
-      }
+      this.updateProfession(message.content)
     } else if (message.action === Action.CREATE) {
       this.summary.push(message.content)
     }
@@ -144,7 +138,7 @@ export class ProfessionsComponent implements OnInit {
   deleteProfession(id: number) {
     this.professionService.deleteProfession(id).subscribe({
       next: () => {
-        this.loadInitialData()
+        this.removeProfession({ id } as Profession)
         this.snackBar.open(
           'Profession deleted successfully',
           undefined,
@@ -169,12 +163,12 @@ export class ProfessionsComponent implements OnInit {
       : this.professionService.createProfession(this.editedProfession!)
     httpAction$.subscribe({
       next: (profession) => {
+        this.editionMode ? this.updateProfession(profession) : this.summary.push(profession)
         this.snackBar.open(
           'Profession submitted successfully',
           undefined,
           getSuccessSnackbarOptions(),
         )
-        this.loadInitialData()
       },
       error: (err) => {
         this.snackBar.open(
@@ -196,6 +190,20 @@ export class ProfessionsComponent implements OnInit {
 
   cancelEditing(): void {
     this.resetState()
+  }
+
+  private removeProfession(profession: Profession): void {
+    const idx = this.summary.findIndex((p) => p.id === profession.id)
+    if (idx > -1) {
+      this.summary.splice(idx, 1)
+    }
+  }
+
+  private updateProfession(profession: Profession): void {
+    const idx = this.summary.findIndex((p) => p.id === profession.id)
+    if (idx > -1) {
+      this.summary[idx] = profession
+    }
   }
 
   private resetState(): void {

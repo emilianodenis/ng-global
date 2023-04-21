@@ -109,15 +109,9 @@ export class CharactersComponent implements OnInit {
 
   private handleCharacterAction(message: DemoMessage<Character>): void {
     if (message.action === Action.DELETE) {
-      const idx = this.summary.findIndex((p) => p.id === message.content.id)
-      if (idx > -1) {
-        this.summary.splice(idx, 1)
-      }
+      this.removeCharacter(message.content)
     } else if (message.action === Action.UPDATE) {
-      const idx = this.summary.findIndex((p) => p.id === message.content.id)
-      if (idx > -1) {
-        this.summary[idx] = message.content
-      }
+      this.updateCharacter(message.content)
     } else if (message.action === Action.CREATE) {
       this.summary.push(message.content)
     }
@@ -155,7 +149,7 @@ export class CharactersComponent implements OnInit {
   deleteCharacter(id: number) {
     this.characterService.deleteCharacter(id).subscribe({
       next: () => {
-        this.loadInitialData()
+        this.removeCharacter({ id } as Character)
         this.snackBar.open('Character deleted successfully', undefined, getSuccessSnackbarOptions())
       },
       error: (err) => {
@@ -176,12 +170,12 @@ export class CharactersComponent implements OnInit {
       : this.characterService.createCharacter(this.editedCharacter!)
     httpAction$.subscribe({
       next: (character) => {
+        this.editionMode ? this.updateCharacter(character) : this.summary.push(character)
         this.snackBar.open(
           'Character submitted successfully',
           undefined,
           getSuccessSnackbarOptions(),
         )
-        this.loadInitialData()
       },
       error: (err) => {
         this.snackBar.open(
@@ -203,6 +197,20 @@ export class CharactersComponent implements OnInit {
 
   cancelEditing(): void {
     this.resetState()
+  }
+
+  private removeCharacter(character: Character): void {
+    const idx = this.summary.findIndex((p) => p.id === character.id)
+    if (idx > -1) {
+      this.summary.splice(idx, 1)
+    }
+  }
+
+  private updateCharacter(character: Character): void {
+    const idx = this.summary.findIndex((p) => p.id === character.id)
+    if (idx > -1) {
+      this.summary[idx] = character
+    }
   }
 
   private resetState(): void {
