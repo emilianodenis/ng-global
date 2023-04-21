@@ -5,6 +5,7 @@ import { Character, characterFullName } from 'src/app/model/character'
 import { DemoMessage } from 'src/app/model/demo-message'
 import { Profession } from 'src/app/model/profession'
 import { AppStateService } from 'src/app/services/app-state.service'
+import { isNullOrUndefined } from 'src/app/utils/object-utils'
 import { getSuccessSnackbarOptions } from 'src/app/utils/snackbar-utils'
 
 @Component({
@@ -14,7 +15,10 @@ import { getSuccessSnackbarOptions } from 'src/app/utils/snackbar-utils'
 })
 export class NewsFeedComponent implements OnInit {
   professionWebSocketEndPoint = 'ws://localhost:4200/ws/professions'
+  professionIntervalRef?: any
+
   characterWebSocketEndPoint = 'ws://localhost:4200/ws/characters'
+  characterIntervalRef?: any
 
   constructor(private appStateService: AppStateService, private snackBar: MatSnackBar) {}
 
@@ -23,11 +27,20 @@ export class NewsFeedComponent implements OnInit {
   }
 
   private connect(): void {
-    let wsProfession = new WebSocket(this.professionWebSocketEndPoint)
-    wsProfession.onmessage = this.onProfessionMessage
+    this.connectProfessionWs()
+    this.connectCharacterWs()
+  }
 
+  private connectCharacterWs(): void {
+    if (!isNullOrUndefined(this.characterIntervalRef)) {
+      clearInterval(this.characterIntervalRef)
+      this.characterIntervalRef = null
+    }
     let wsCharacter = new WebSocket(this.characterWebSocketEndPoint)
     wsCharacter.onmessage = this.onCharacterMessage
+    wsCharacter.onerror = (evt) => wsCharacter.close()
+    wsCharacter.onclose = (evt) =>
+      (this.characterIntervalRef = setInterval(() => this.connectCharacterWs(), 1000))
   }
 
   onCharacterMessage = (msgEvt: MessageEvent<string>) => {
@@ -38,6 +51,18 @@ export class NewsFeedComponent implements OnInit {
       this.snackBar.open(this.getCharacterMessage(message), undefined, getSuccessSnackbarOptions())
       this.appStateService.notifyChacracterAction(message)
     }
+  }
+
+  private connectProfessionWs(): void {
+    if (!isNullOrUndefined(this.professionIntervalRef)) {
+      clearInterval(this.professionIntervalRef)
+      this.professionIntervalRef = null
+    }
+    let wsProfession = new WebSocket(this.professionWebSocketEndPoint)
+    wsProfession.onmessage = this.onProfessionMessage
+    wsProfession.onerror = (evt) => wsProfession.close()
+    wsProfession.onclose = (evt) =>
+      (this.professionIntervalRef = setInterval(() => this.connectProfessionWs(), 1000))
   }
 
   onProfessionMessage = (msgEvt: MessageEvent<string>) => {
