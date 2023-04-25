@@ -9,7 +9,7 @@ app-news-feed {
 }
 
 nav {
-  padding-top: 5px;
+  padding-top: 10px;
   position: fixed;
   top: 0;
   left: 0;
@@ -17,6 +17,7 @@ nav {
 
 ul {
   list-style-type: none;
+  font-size: 18px;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -25,4 +26,9 @@ ul {
 li {
   float: left;
   margin-left: 25px;
+  & a,
+  a:hover,
+  a:visited {
+    color: bisque;
+  }
 }
