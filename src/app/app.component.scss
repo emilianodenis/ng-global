@@ -29,6 +29,9 @@ li {
   & a,
   a:hover,
   a:visited {
+    color: darkolivegreen;
+  }
+  & a.active-link {
     color: bisque;
   }
 }
