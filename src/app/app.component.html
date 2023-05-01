@@ -1,21 +1,28 @@
-<nav>
-  <ul>
-    <li>
-      <a
-        routerLink="characters"
-        routerLinkActive="active-link"
-        >Characters</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="professions"
-        routerLinkActive="active-link"
-        >Professions</a
-      >
-    </li>
-  </ul>
-</nav>
+<div class="top-bar">
+  <nav>
+    <ul>
+      <li>
+        <a
+          routerLink="characters"
+          routerLinkActive="active-link"
+          >Characters</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="professions"
+          routerLinkActive="active-link"
+          >Professions</a
+        >
+      </li>
+    </ul>
+  </nav>
+  <button
+    mat-button
+    (click)="loadData()">
+    Reset Data
+  </button>
+</div>
 
 <app-news-feed></app-news-feed>
 

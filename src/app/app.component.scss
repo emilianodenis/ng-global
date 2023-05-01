@@ -8,11 +8,17 @@ app-news-feed {
   display: none;
 }
 
-nav {
+.top-bar {
   padding-top: 10px;
   position: fixed;
   top: 0;
   left: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  & button {
+    margin-right: 25px;
+  }
 }
 
 ul {
