@@ -8,6 +8,7 @@ import { DemoMessage } from 'src/app/model/demo-message'
 import { EditState } from 'src/app/model/edit-state'
 import { Profession } from 'src/app/model/profession'
 import { AppStateService } from 'src/app/services/app-state.service'
+import { AutoInvestService } from 'src/app/services/auto-invest.service'
 import { CharacterService } from 'src/app/services/characters.service'
 import { ProfessionsService } from 'src/app/services/professions.service'
 import { isNullOrUndefined } from 'src/app/utils/object-utils'
@@ -57,6 +58,7 @@ export class CharactersComponent implements OnInit {
   constructor(
     private characterService: CharacterService,
     private professionService: ProfessionsService,
+    private autoInvestService: AutoInvestService,
     private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -224,5 +226,9 @@ export class CharactersComponent implements OnInit {
     this.router.navigate([], {
       queryParams: { id: null },
     })
+  }
+
+  triggerAutoInvest(characterId: number): void {
+    this.autoInvestService.triggerAutoInvest(characterId).subscribe()
   }
 }

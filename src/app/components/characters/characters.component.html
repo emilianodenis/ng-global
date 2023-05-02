@@ -33,7 +33,11 @@
             (click)="deleteCharacter(character.id)">
             Delete
           </button>
-          <button mat-menu-item>Auto Invest</button>
+          <button
+            mat-menu-item
+            (click)="triggerAutoInvest(character.id)">
+            Auto Invest
+          </button>
         </mat-menu>
       </mat-list-item>
     </mat-list>
