@@ -9,6 +9,7 @@ export interface BaseCharacter {
 export interface Character extends BaseCharacter {
   email: string
   profession: Profession
+  amount: number
 }
 
 export function characterFullName(character: BaseCharacter): string {

@@ -3,8 +3,7 @@
     mat-button
     (click)="loadInitialData()"
     color="primary"
-    class="load-btn"
-  >
+    class="load-btn">
     <span>Load All Characters</span>
     <mat-icon>autorenew</mat-icon>
   </button>
@@ -16,8 +15,7 @@
       <mat-list-item
         *ngFor="let character of summary"
         class="characters"
-        [class.selected]="character === selectedCharacter"
-      >
+        [class.selected]="character === selectedCharacter">
         <a
           class="character-name"
           routerLink="/characters"
@@ -30,10 +28,7 @@
           fontIcon="delete"
           color="warn"
           class="delete-character"
-          (click)="
-            $event.stopImmediatePropagation(); deleteCharacter(character.id)
-          "
-        ></mat-icon>
+          (click)="$event.stopImmediatePropagation(); deleteCharacter(character.id)"></mat-icon>
       </mat-list-item>
     </mat-list>
     <div class="form-action-container">
@@ -42,8 +37,7 @@
         color="accent"
         class="create-btn"
         [disabled]="!canCreate"
-        (click)="createNewCharacter()"
-      >
+        (click)="createNewCharacter()">
         CREATE
       </button>
     </div>
@@ -53,7 +47,9 @@
       <h2>
         {{ title }}
       </h2>
-      <form class="edit" (ngSubmit)="submit()">
+      <form
+        class="edit"
+        (ngSubmit)="submit()">
         <mat-form-field appearance="outline">
           <mat-label>Last Name</mat-label>
           <input
@@ -74,9 +70,10 @@
           <mat-label>Profession</mat-label>
           <mat-select
             [(ngModel)]="editedCharacter.profession"
-            [ngModelOptions]="{ standalone: true }"
-          >
-            <mat-option *ngFor="let p of professions" [value]="p">
+            [ngModelOptions]="{ standalone: true }">
+            <mat-option
+              *ngFor="let p of professions"
+              [value]="p">
               {{ p.description }}
             </mat-option>
           </mat-select>
@@ -90,21 +87,28 @@
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Gold Pieces</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="editedCharacter.amount"
+            [ngModelOptions]="{ standalone: true }"
+        /></mat-form-field>
+
         <div class="form-action-container">
           <button
             mat-flat-button
             type="submit"
             color="accent"
-            [disabled]="!canSubmit"
-          >
+            [disabled]="!canSubmit">
             SUBMIT
           </button>
           <button
             mat-stroked-button
             type="button"
             color="accent"
-            (click)="cancelEditing()"
-          >
+            (click)="cancelEditing()">
             CANCEL
           </button>
         </div>
