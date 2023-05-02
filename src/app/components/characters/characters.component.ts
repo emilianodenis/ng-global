@@ -151,6 +151,9 @@ export class CharactersComponent implements OnInit {
       next: () => {
         this.removeCharacter({ id } as Character)
         this.snackBar.open('Character deleted successfully', undefined, getSuccessSnackbarOptions())
+        if (this.editedCharacter?.id === id) {
+          this.resetState()
+        }
       },
       error: (err) => {
         this.snackBar.open(

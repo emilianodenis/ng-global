@@ -78,8 +78,7 @@ a {
   & .character-name {
     direction: ltr;
   }
-  & .delete-character {
-    color: $warn-color;
+  & .character-menu {
     padding: 5px;
   }
 }

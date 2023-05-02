@@ -23,12 +23,18 @@
           >{{ characterFullName(character) }}</a
         >
         <mat-icon
-          *ngIf="isReadMode"
           matListItemIcon
-          fontIcon="delete"
-          color="warn"
-          class="delete-character"
-          (click)="$event.stopImmediatePropagation(); deleteCharacter(character.id)"></mat-icon>
+          fontIcon="more_vert"
+          class="character-menu"
+          [matMenuTriggerFor]="menu"></mat-icon>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            (click)="deleteCharacter(character.id)">
+            Delete
+          </button>
+          <button mat-menu-item>Auto Invest</button>
+        </mat-menu>
       </mat-list-item>
     </mat-list>
     <div class="form-action-container">

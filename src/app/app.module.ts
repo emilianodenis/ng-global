@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatIconModule } from '@angular/material/icon'
 import { MatInputModule } from '@angular/material/input'
 import { MatListModule } from '@angular/material/list'
+import { MatMenuModule } from '@angular/material/menu'
 import { MatSelectModule } from '@angular/material/select'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
 import { BrowserModule } from '@angular/platform-browser'
@@ -20,12 +21,7 @@ import { PathInterceptor } from 'src/app/services/interceptors/http-interceptor.
 import { SessionInterceptor } from 'src/app/services/interceptors/session-id-interceptor.service'
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CharactersComponent,
-    NewsFeedComponent,
-    ProfessionsComponent,
-  ],
+  declarations: [AppComponent, CharactersComponent, NewsFeedComponent, ProfessionsComponent],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -37,6 +33,7 @@ import { SessionInterceptor } from 'src/app/services/interceptors/session-id-int
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatMenuModule,
     MatSelectModule,
     MatSnackBarModule,
     ReactiveFormsModule,
