@@ -13,7 +13,7 @@ export class AutoInvestService {
     return `${AutoInvestService.URL}/${id}`
   }
 
-  triggerAutoInvest(characterId: number): Observable<any> {
-    return this.http.post<any>(this.getIdUrl(characterId), {})
+  triggerAutoInvest(characterId: number): Observable<string> {
+    return this.http.post<string>(this.getIdUrl(characterId), {})
   }
 }

@@ -229,6 +229,14 @@ export class CharactersComponent implements OnInit {
   }
 
   triggerAutoInvest(characterId: number): void {
-    this.autoInvestService.triggerAutoInvest(characterId).subscribe()
+    this.autoInvestService.triggerAutoInvest(characterId).subscribe({
+      next: (msg) => this.snackBar.open(msg, undefined, getSuccessSnackbarOptions()),
+      error: (err) =>
+        this.snackBar.open(
+          'Could not trigger invest rules',
+          undefined,
+          getFailureSnackbarOptions(),
+        ),
+    })
   }
 }
