@@ -90,10 +90,13 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
+          <mat-label>Age</mat-label>
           <input
             matInput
-            [(ngModel)]="editedCharacter.email"
+            type="number"
+            min="10"
+            step="1"
+            [(ngModel)]="editedCharacter.age"
             [ngModelOptions]="{ standalone: true }"
         /></mat-form-field>
 

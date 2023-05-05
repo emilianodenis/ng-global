@@ -7,7 +7,7 @@ export interface BaseCharacter {
 }
 
 export interface Character extends BaseCharacter {
-  email: string
+  age: number
   profession: Profession
   amount: number
 }

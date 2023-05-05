@@ -51,7 +51,7 @@ export class CharactersComponent implements OnInit {
       !isNullOrUndefined(this.editedCharacter!.profession) &&
       !isNullOrEmpty(this.editedCharacter!.firstName) &&
       !isNullOrEmpty(this.editedCharacter!.lastName) &&
-      !isNullOrEmpty(this.editedCharacter!.email)
+      !isNullOrUndefined(this.editedCharacter!.age)
     )
   }
 
