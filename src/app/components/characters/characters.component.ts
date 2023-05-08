@@ -229,7 +229,12 @@ export class CharactersComponent implements OnInit {
   }
 
   triggerAutoInvest(characterId: number): void {
-    this.autoInvestService.triggerAutoInvest(characterId).subscribe({
+    var percent = prompt('What percentage of your wallet would you like to spend on rings?')
+    if (isNullOrEmpty(percent)) return
+    var numberPercent = Number.parseFloat(percent!)
+    if (isNaN(numberPercent) || !numberPercent) return
+
+    this.autoInvestService.triggerAutoInvest(characterId, numberPercent).subscribe({
       next: (msg) => this.snackBar.open(msg, undefined, getSuccessSnackbarOptions()),
       error: (err) =>
         this.snackBar.open(
